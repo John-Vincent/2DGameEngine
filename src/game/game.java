@@ -50,7 +50,7 @@ public class game implements Runnable{
 		exchanger = new Exchanger<SnapShot>();
 		js = new ScriptManager(exchanger, keys);
 
-		Map window = js.getWindow();
+		Map<String, Object> window = js.getWindow();
 
 		debug = (boolean)window.get("debug");
 		WIDTH = ((Number)window.get("width")).intValue();

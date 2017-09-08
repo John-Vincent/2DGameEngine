@@ -1,6 +1,9 @@
 package imaging;
 
 import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import game.HitBox;
 import imaging.Tile.Tile;
@@ -11,7 +14,17 @@ public class GraphicsManager {
 	final public Tile[] tiles;
 
 	public GraphicsManager(String path, Map<String,Tile> tiles){
-		Image image = new Image("file:"+ File.separator +game.game.DirRoot+path);
+    FileInputStream istream = null;
+
+    try{
+      istream = new FileInputStream(new File(game.game.DirRoot+path));
+    } catch(FileNotFoundException e){
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+      System.exit(-1);
+    }
+    
+		Image image = new Image(istream);
 		PixelReader r = image.getPixelReader();
 		this.tiles = new Tile[tiles.size()];
 		int i = 0;
@@ -83,10 +96,10 @@ public class GraphicsManager {
 	}
 
 	public void drawHitBox(HitBox rec, int[] data) {
-		int xmin = (int) rec.getXMin();
-		int xmax = (int) rec.getXMax();
-		int ymin = (int) rec.getYMin();
-		int ymax = (int) rec.getYMax();
+		int xmin = rec.getXMin();
+		int xmax = rec.getXMax();
+		int ymin = rec.getYMin();
+		int ymax = rec.getYMax();
 
 		for(int i = xmin; i<=xmax; i++){
 			if(i>0&&i<game.game.WIDTH&&ymin>0&&ymin<game.game.HEIGHT)

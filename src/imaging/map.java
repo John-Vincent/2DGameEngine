@@ -1,6 +1,8 @@
 package imaging;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,7 +25,7 @@ public class map {
 		this.width = width;
 		this.height = height;
 		//have to use toString with fx:Image
-		Image image = new Image("file:"+ File.separator +game.game.DirRoot+mapPath);
+		Image image = new Image(game.game.DirRoot+mapPath);
 		int[] pixels = new int[width*height];
 		tiles = new byte[width][height];
 
@@ -36,18 +38,27 @@ public class map {
 	}
 
 	public map(String mapPath, String map2Path, int width, int height){
-		Entities = null;
+    Entities = null;
 		this.width = width;
 		this.height = height;
-
-		Image image = new Image("file:"+ File.separator +game.game.DirRoot+mapPath);
+    FileInputStream map1 = null;
+    FileInputStream map2 = null;
+    try{
+      map1 = new FileInputStream(new File(game.game.DirRoot+mapPath));
+      map2 = new FileInputStream(new File(game.game.DirRoot+map2Path));
+    } catch(FileNotFoundException e){
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+      System.exit(-1);
+    }
+		Image image = new Image(map1);
 		int[] pixels1 = new int[width*height];
 		int[] pixels2 = new int[width*height];
 		tiles = new byte[width][height];
 		tiles2 = new byte[width][height];
 
 		image.getPixelReader().getPixels(0, 0, width, height, WritablePixelFormat.getIntArgbPreInstance(), pixels1, 0, width);
-		image = new Image("file:"+ File.separator + game.game.DirRoot+map2Path);
+		image = new Image(map2);
 		image.getPixelReader().getPixels(0, 0, width, height, WritablePixelFormat.getIntArgbPreInstance(), pixels2, 0, width);
 		for(int i =0; i<width; i++){
 			for(int j = 0; j<height; j++){
@@ -59,22 +70,32 @@ public class map {
 					tiles2[i][j] = (byte) 0xff;
 			}
 		}
-
 	}
 
 	public map(String mapPath, String map2Path, String EntityPath, int width, int height){
 		this.width = width;
 		this.height = height;
+    FileInputStream map1 = null;
+    FileInputStream map2 = null;
+    FileInputStream entityMap = null;
+
+    try{
+      map1 = new FileInputStream(new File(game.game.DirRoot+mapPath));
+      map2 = new FileInputStream(new File(game.game.DirRoot+map2Path));
+      entityMap = new FileInputStream(new File(game.game.DirRoot+EntityPath));
+    } catch(FileNotFoundException e){
+      e.printStackTrace();
+      System.exit(-1);
+    }
 
 		int[] pixels1 = new int[width*height];
 		int[] pixels2 = new int[width*height];
 		int[] pixels3 = new int[width*height];
-
-		Image image = new Image("file:"+ File.separator +game.game.DirRoot+mapPath);
+		Image image = new Image(map1);
 		image.getPixelReader().getPixels(0, 0, width, height, WritablePixelFormat.getIntArgbPreInstance(), pixels1, 0, width);
-		image = new Image("file:"+ File.separator +game.game.DirRoot+map2Path);
+		image = new Image(map2);
 		image.getPixelReader().getPixels(0, 0, width, height, WritablePixelFormat.getIntArgbPreInstance(), pixels2, 0, width);
-		image = new Image("file:"+ File.separator +game.game.DirRoot+EntityPath);
+		image = new Image(entityMap);
 		image.getPixelReader().getPixels(0, 0, width, height, WritablePixelFormat.getIntArgbPreInstance(), pixels3, 0, width);
 
 		ArrayList<Entity> ents = new ArrayList<Entity>();

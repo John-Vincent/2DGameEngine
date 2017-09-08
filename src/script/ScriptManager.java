@@ -20,24 +20,24 @@ import game.SnapShot;
 import input.InputHandler;
 
 public class ScriptManager extends Thread {
-	
+
 	ScriptEngine engine;
-	
+
 	Exchanger<SnapShot> exchanger;
-	
+
 	SnapShot shot = new SnapShot();
-	
+
 	ArrayList<Entity> ents = new ArrayList<Entity>();
-	
+
 	InputHandler keys;
-	
-	
+
+
 	public ScriptManager(Exchanger<SnapShot> ex, InputHandler keys){
 		exchanger = ex;
 		this.keys = keys;
 		ScriptEngineManager a = new ScriptEngineManager();
 		engine = a.getEngineByExtension("js");
-		
+
 		try {
 			engine.eval("var AnimatedTile = Java.type('imaging.Tile.AnimatedTile')");
 			engine.eval("var GraphicsManager = Java.type('imaging.GraphicsManager'); var NormalTile = Java.type('imaging.Tile.NormalTile'); var JavaEntity = Java.type('script.Entity'); var Map = Java.type('imaging.map');");
@@ -46,15 +46,16 @@ public class ScriptManager extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public Map getWindow(){
-		Map window = null;
+
+  @SuppressWarnings("unchecked")
+	public Map<String, Object> getWindow(){
+		Map<String, Object> window = null;
 		try {
 			InputStream stream = new FileInputStream(game.game.DirRoot+"init.js");
 			Reader r = new InputStreamReader(stream);
-			window = (Map)engine.eval(r);
+			window = (Map<String, Object>)engine.eval(r);
 			r.close();
 			stream.close();
 		} catch (ScriptException | IOException e) {
@@ -63,8 +64,8 @@ public class ScriptManager extends Thread {
 		}
 		return window;
 	}
-	
-	
+
+
 	@Override
 	public void run(){
 		boolean running = true;
@@ -88,7 +89,7 @@ public class ScriptManager extends Thread {
                 	running = false;
                 engine.eval("var activeKeys = '"+allkeys[0]+"'; var pressedKeys = '"+allkeys[1]+ "'; EntryPoint();");
 				shot = exchanger.exchange(shot);
-			
+
 			} catch(ScriptException e){
 				running = false;
 				e.printStackTrace();
@@ -96,10 +97,10 @@ public class ScriptManager extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
+
+
 		}
 	}
-	
-	
+
+
 }
