@@ -2,7 +2,7 @@
 
 var window = {
 	width: 1300, 
-	height: parseInt(1300/12*9), 
+	height: 720, 
 	base: 16,
 	scale: 3,
 	tick: 0,
@@ -38,17 +38,25 @@ function Entity(x, y, tile, scale, movespeed, tick){
 Entity.prototype.isIn = function(tile){
 	return this.java.isIn(tile, level.Map, level.GraphicsManager, window.tick);
 }
-Entity.prototype.isTopCollided = function(){
-	return this.java.isTopCollided();
+Entity.prototype.TopCollision = function(bool){
+	if(bool === undefined)
+		return this.java.isTopCollided();
+	this.java.setTopCollision(bool);
 }
-Entity.prototype.isBottomCollided = function(){
-	return this.java.isBottomCollided();
+Entity.prototype.BottomCollision = function(bool){
+	if(bool === undefined)
+		return this.java.isBottomCollided();
+	this.java.setBottomCollision(bool);
 }
-Entity.prototype.isLeftCollided = function(){
-	return this.java.isLeftCollided();
+Entity.prototype.LeftCollision = function(bool){
+	if(bool === undefined)
+		return this.java.isLeftCollided();
+	this.java.setLeftCollision(bool);
 }
-Entity.prototype.isRightCollided = function(){
-	return this.java.isRightCollided();
+Entity.prototype.RightCollision = function(bool){
+	if(bool === undefined)
+		return this.java.isRightCollided();
+	this.java.setRightCollision(bool);
 }
 Entity.prototype.setScreenScrollBox = function( xmin, ymin, xmax, ymax, x, y){
     if(xmin === undefined || xmax === undefined || ymin === undefined || ymax === undefined)
@@ -101,12 +109,6 @@ Entity.prototype.Xpos = function(x){
 		return this.java.getX();
 	this.java.setX(x);
 };
-Entity.prototype.setCollisionTypes = function(top, right, bottom, left){
-	this.java.setBottomCollision(bottom);
-	this.java.setTopCollision(top);
-	this.java.setLeftCollision(left);
-	this.java.setRightCollision(right);
-}
 Entity.prototype.Ypos = function(y){
 	if(y === undefined)
 		return this.java.getY();

@@ -12,17 +12,23 @@ var getsheet = function(){
 		BOTTOM_LEFT_DIRT: new NormalTile( 160, 16, 16, 16),
 		BOTTOM_CENTER_DIRT: new NormalTile( 112, 16, 16, 16),
 		
-		LADDER_TOP: new NormalTile( 112, 64, 16, 16, 2, 0, 12, 16, false),
-		LADDER_CENTER: new NormalTile( 112, 80, 16, 16, 2, 0, 12, 16, false),
-		LADDER_BOTTOM: new NormalTile( 112, 96, 16, 16, 2, 0, 12, 16, false),
+		LADDER_TOP: new NormalTile( 112, 64, 16, 16, 2, 0, 10, 16, false),
+		LADDER_CENTER: new NormalTile( 112, 80, 16, 16, 2, 0, 10, 16, false),
+		LADDER_BOTTOM: new NormalTile( 112, 96, 16, 16, 2, 0, 10, 16, false),
 		
 		BACKGROUND_TOP_RIGHT_GRASS: new NormalTile( 176, 64, 16, 16),
 		BACKGROUND_TOP_CENTER_GRASS: new NormalTile( 192, 64, 16, 16),
 		BACKGROUND_TOP_LEFT_GRASS: new NormalTile( 208, 64, 16, 16),
+		BACKGROUND_MIDDLE_LEFT_GRASS: new NormalTile( 176, 80, 16, 16),
+		BACKGROUND_MIDDLE_RIGHT_GRASS: new NormalTile( 208, 80, 16, 16),
+		BACKGROUND_BOTTOM_LEFT_GRASS: new NormalTile( 176, 96, 16, 16),
+		BACKGROUND_BOTTOM_CENTER_GRASS: new NormalTile( 192, 96, 16,16),
+		BACKGROUND_BOTTOM_RIGHT_GRASS: new NormalTile( 208, 96, 16, 16),
+		BACKGROUND_CENTER_GRASS: new NormalTile(160, 96, 16,16),
 		
 		
 		PLAYER_LADDER_STILL: new NormalTile(221, 115, 17, 24, 0, 0, 17, 23, true),
-		PLAYER_LADDER_MOVING: new AnimatedTile(15),
+		PLAYER_LADDER_MOVING: new AnimatedTile(10),
 		PLAYER_STILL: new NormalTile(187, 140, 18, 24, 0, 0, 17, 23, true),
 		PLAYER_WALKING: new AnimatedTile(15),
 		PLAYER_RUNNING: new AnimatedTile(15),

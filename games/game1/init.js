@@ -1,12 +1,12 @@
 /* global level */
 
 var window = {
-	width: 1300, 
-	height: parseInt(1300/12*9), 
+	width: 1300,
+	height: parseInt(1300/12*9),
 	base: 16,
 	scale: 3,
 	tick: 0,
-	debug: true,
+	debug: false,
 	update: function(){
 		SnapShot.setMapCoords(level.MapCoords);
 		if(SnapShot.getGraphics() !== level.GraphicsManager)
@@ -30,7 +30,7 @@ function Entity(x, y, tile, scale, movespeed, tick){
 	JavaEntities.add(this.java);
 	if(tick=== undefined)
 		this.tick = function(){
-		
+
 		};
 	else
 		this.tick = tick;
@@ -88,7 +88,7 @@ Entity.prototype.scale = function(scale){
 };
 Entity.prototype.NoClip = function(bool){
 	this.java.setNoClip(bool);
-}	
+}
 Entity.prototype.invertX = function(bool){
 	if(bool === undefined)
 		return this.java.isInvertX();
@@ -118,7 +118,7 @@ Entity.prototype.remove = function(){
 		if(this.java == JavaEntites.get(i)){
 			JavaEntites.remove(i);
 			break;
-		}	
+		}
 	}
 }
 

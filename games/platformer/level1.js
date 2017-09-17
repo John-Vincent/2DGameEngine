@@ -1,8 +1,12 @@
 var EntityFunctions = {
     PlayerFunction: function(){
-		var tile= this.tile(), xspeed = 0, yspeed = this.jumpSpeed, movespeed = this.moveSpeed(), input = false, 
+		var tile= this.tile(), xspeed = 0, yspeed = 8, movespeed = this.moveSpeed(), input = false, 
 		onLadder = this.isTouching(level.Tiles.LADDER_TOP)||this.isTouching(level.Tiles.LADDER_CENTER)||this.isTouching(level.Tiles.LADDER_BOTTOM),
-		onGround = this.isBottomCollided();
+		onGround = this.BottomCollision();
+		this.BottomCollision(true);
+		if(onLadder)
+			yspeed = 0;
+		
 		if(onGround){
 			this.jumping = 0;
 			this.doubleJump = false;
@@ -27,41 +31,43 @@ var EntityFunctions = {
 				tile = level.Tiles.PLAYER_RUNNING;
 			}
 		}
-		if(activeKeys.matches(".*( W,| Space,| Up,).*")){
-			input = true;
-			if(onLadder){
-				tile = level.Tiles.PLAYER_LADDER_MOVING;
-				yspeed-=(this.jumpSpeed+3);
-			}
-			else{
+		if(activeKeys.matches(".*( Space,| Up,).*")){
+			input = true;	
 				if(this.jumping == 0)
 					tile = level.Tiles.PLAYER_JUMP_START;
 				if(this.jumping<this.jumpTime){
-					if(this.jumping<(this.jumpTime-this.jumpSpeed))
-						yspeed -= this.jumpSpeed*2;
-					else
-						yspeed -= (this.jumpSpeed + (this.jumpTime-this.jumping))
+					yspeed = -this.jumpSpeed;
+					if(this.jumpTime-this.jumping<this.jumpSpeed)
+						yspeed = this.jumping-this.jumpTime;
 					tile = level.Tiles.PLAYER_JUMP_UP;
 				}
 				else{
-					if(this.jumping<(this.jumpTime+this.jumpSpeed)){
-						yspeed -= ((this.jumpTime+this.jumpSpeed) - this.jumping)
+					if(this.jumping-this.jumpTime<yspeed){
+						yspeed = this.jumping-this.jumpTime;
 					}
 					tile = level.Tiles.PLAYER_JUMP_DOWN;
 					if(onGround)
 						tile = level.Tiles.PLAYER_JUMP_LAND;
 				}
 				this.jumping+=1;
-			}
 		}
-		if(activeKeys.matches(".*( S,| Down,).*")&&onLadder){
+		
+		if(onLadder && activeKeys.contains(" W,")){
+				input = true;
+				tile = level.Tiles.PLAYER_LADDER_MOVING;
+				yspeed = -3;
+		}
+		
+		if(onLadder && activeKeys.matches(".*( S,| Down,).*")){
 			tile = level.Tiles.PLAYER_LADDER_MOVING;
+			this.BottomCollision(false);
 			input = true;
 			yspeed = 3;
 		}
+		
 		if(pressedKeys.matches(".*( W,| Space,| Up,).*")){
 			if(!this.doubleJump){
-				this.jumping = true
+				this.doubleJump = true
 				this.jumping = 0;
 			}
 			else
@@ -86,7 +92,7 @@ var EntityFunctions = {
 	}
 }
 var level = {
-    Map : new Map('map0Layer1.png', "map0Layer2.png", 200, 21),
+    Map : new Map('map0Layer1.png', "map0Layer2.png", 117, 15),
     MapCoords: [0,0],
     SheetPath: {},
     Tiles:{},
@@ -95,17 +101,24 @@ var level = {
         for(var i = 0; i<this.Entities.length; i++){
             this.Entities[i].tick();
         }
-		if(pressedKeys.contains(" Esc,")||this.Entities[0].Ypos()>955)
+		if(pressedKeys.contains(" Esc,")||this.Entities[0].Ypos()>720)
 			return "level1.js";
+		if(this.Entities[0].Xpos()>5600){
+			this.Map = new Map("map1Layer1.png", 50, 15);
+			this.Entities[0].Xpos(384);
+			this.Entities[0].Ypos(240);
+			this.MapCoords = [0,0]
+		}
     }
 
 }
 load(window.gameDirectory+"spritesheet.js");
-level.Entities.push(new Entity(192, 624, level.Tiles.PLAYER_STILL, 2, 5, EntityFunctions.PlayerFunction));
-level.Entities[0].setCollisionTypes(false,false,true,false);
+level.Entities.push(new Entity(192, 300, level.Tiles.PLAYER_STILL, 2, 4, EntityFunctions.PlayerFunction));
+level.Entities[0].TopCollision(false); level.Entities[0].LeftCollision(false); level.Entities[0].RightCollision(false);
 level.Entities[0].jumping = 0;
-level.Entities[0].jumpTime = 20;
+level.Entities[0].jumpTime = 15;
 level.Entities[0].jumpSpeed = 6;
 level.Entities[0].doubleJump = false;
+level.Entities[0].java.setMapBounded(false);
 level.Entities[0].setScreenScrollBox(window.width/4,window.height/4, window.width*2/4, window.height*2/4, true, false);
 getsheet = null;
