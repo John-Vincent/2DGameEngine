@@ -1,14 +1,36 @@
 SRC = src/
 BIN = classes/
-CP = javac -d classes -Werror -Xlint
 
-GAME = $(addprefix $(SRC)game/, game GUI HitBox SnapShot)
+JC = javac -d classes -Werror -Xlint
+CP = -cp .:src
+
+RM = rm -r
+ECHO = echo
+
+GAME = $(addprefix $(BIN)game/, game GUI HitBox SnapShot)
 TILE = $(addprefix Tile/, AnimatedTile NormalTile Tile)
-IMAGE = $(addprefix $(SRC)imaging/, $(TILE) GraphicsManager map)
-INPUT = $(addprefix $(SRC)input/, InputHandler)
-SCRIPT = $(addprefix $(SRC)script/, Entity ScriptManager)
+IMAGE = $(addprefix $(BIN)imaging/, $(TILE) GraphicsManager map)
+INPUT = $(addprefix $(BIN)input/, InputHandler)
+SCRIPT = $(addprefix $(BIN)script/, Entity ScriptManager)
 
-SOURCES = $(addsuffix .java, $(GAME) $(IMAGE) $(INPUT) $(SCRIPT))
+SOURCES = $(addsuffix .class, $(GAME) $(IMAGE) $(INPUT) $(SCRIPT))
 
-default: $(SOURCES)
-	$(CP) $(SOURCES)
+default: makebin $(SOURCES)
+	@$(ECHO) "finished"
+
+$(BIN)%.class: $(SRC)%.java
+	@$(ECHO)
+	@$(JC) $(CP) $<
+
+run: $(SOURCES)
+	java -cp classes game.GUI
+
+clean:
+	@$(ECHO) "removing binaries"
+	@[ ! -d $(BIN) ] || $(RM) $(BIN)
+
+makebin:
+	@[  -d $(BIN) ] || $(ECHO) "making bin folder"
+	@[  -d $(BIN) ] || mkdir $(BIN)
+
+.PHONY: makebin clean default run

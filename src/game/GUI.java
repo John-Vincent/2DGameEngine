@@ -136,7 +136,7 @@ public class GUI extends Application {
 		            b.setDisable(false);
 		          }
 		        });
-			webEngine.load("http://localhost/2DgameSite/request.html");
+			webEngine.load("https://gamesite.collinvincent.com");
 			a.setOnMouseClicked(EventHandler ->{
 				if(loaded){
 					webEngine.executeScript("getFiles();");
